@@ -1,0 +1,14 @@
+FROM node:20-alpine
+
+WORKDIR /app/client
+
+# 直接复制完整 client（Quasar 对项目结构敏感）
+COPY client/ ./
+
+# 不用 frozen-lockfile，避免 Quasar + yarn 的边界问题
+RUN yarn install
+
+EXPOSE 9000
+
+# 必须监听 0.0.0.0，否则宿主机访问不到
+CMD ["sh", "-lc", "yarn quasar dev -H 0.0.0.0 -p 9000"]
